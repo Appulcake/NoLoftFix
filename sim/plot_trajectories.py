@@ -10,6 +10,7 @@ import sys
 from dataclasses import dataclass, field
 from pathlib import Path
 
+
 AXES = ["range_km", "launch_alt_m", "launch_speed_ms",
         "target_alt_m", "target_speed_ms"]
 
@@ -65,8 +66,8 @@ STATUS_LINE = {
 }
 STATUS_MARKER = {"ok": "o", "woven": "^", "infeasible": "x",
                  "unverified": "o", "unknown": "o"}
-STATUS_NOTE = {"ok": "", "woven": "WOVEN", "infeasible": "INFEASIBLE",
-               "unverified": "unverified", "unknown": ""}
+STATUS_NOTE = {"ok": "", "woven": "~~", "infeasible": "dnf",
+               "unverified": "unv", "unknown": ""}
 
 
 @dataclass
@@ -317,7 +318,7 @@ def load_table(path: Path, label: str | None = None) -> tuple[list[Cell], list[s
     except Exception as e:
         return [], [f"{path}: cannot read ({type(e).__name__}: {e})"]
     if not isinstance(d, dict) or "cells" not in d:
-        return [], [f"{path}: no 'cells' key -- not a merged table?"]
+        return [], [f"{path}: no 'cells' key, this might not be a merged table?"]
     src = label or path.name
     cells = []
     for i, obj in enumerate(d["cells"]):
@@ -502,10 +503,8 @@ def curve_annotation(c: Cell) -> str:
         extra.append(note)
     elif not c.converged:
         extra.append("nc")
-    if c.flat:
-        extra.append("FLAT")
     if c.beyond_envelope:
-        extra.append("beyond")
+        extra.append(">mR")
     return "  ".join(extra)
 
 
@@ -588,8 +587,8 @@ def plot_family(cells: list[Cell], args, plt, desc: str):
     if sweep_axis:
         rest = [a for a in rest if a != sweep_axis]
     if rest:
-        print(f"NOTE: {', '.join(rest)} also varies but is not shown. "
-              f"Fix it with --fix {rest[0]}=<value> to see it.", file=sys.stderr)
+        print(f"{', '.join(rest)} also varies but is not shown. "
+              f"Set --fix {rest[0]}=<value> to show.", file=sys.stderr)
 
     row_vals = values_of(cells, rows_axis) if rows_axis else [None]
     col_vals = values_of(cells, cols_axis) if cols_axis else [None]
@@ -628,15 +627,8 @@ def plot_family(cells: list[Cell], args, plt, desc: str):
                              layout="constrained")
     for k in range(len(pairs), n_rows * n_cols):
         axes[k // n_cols][k % n_cols].set_visible(False)
-    where = []
-    if rows_axis:
-        where.append(f"rows: {LABEL[rows_axis]}")
-    if cols_axis:
-        where.append(f"cols: {LABEL[cols_axis]}")
-    if sweep_axis:
-        where.append(f"lines: {LABEL[sweep_axis]}")
-    fig.suptitle(f"planned loft trajectories -- {desc}\n" + " | ".join(where),
-                 fontsize=11)
+    fig.suptitle(
+        f"planned loft trajectories {desc}", fontsize=11)
 
     legend_handles = {}
     for idx, (rv, cv) in enumerate(pairs):
@@ -715,13 +707,13 @@ def plot_family(cells: list[Cell], args, plt, desc: str):
         if s not in present or s == "ok":
             continue
         legend_handles.setdefault(
-            {"woven": "woven -- up-down-up, not a loft",
-             "infeasible": "infeasible -- does not fly its own claim",
+            {"woven": "woven: many turning points",
+             "infeasible": "infeasible",
              "unverified": "no verdict recorded",
              "unknown": "no verdict recorded"}[s],
             Line2D([], [], color="0.35", ls=STATUS_LINE[s], lw=1.4))
     if any(c.beyond_envelope for c in cells):
-        legend_handles.setdefault("beyond the solved envelope (hollow marker)",
+        legend_handles.setdefault("beyond maximum range",
                                   Line2D([], [], color="crimson", ls="none", marker="s",
                                          ms=4, mfc="none", markeredgewidth=0.9))
     if legend_handles:
@@ -1505,7 +1497,7 @@ def describe(cells: list[Cell], args) -> str:
         bits.append("flat hidden")
     if args.only_converged:
         bits.append("converged only")
-    return " ".join(bits) + f" -- {summary(cells)}"
+    return " ".join(bits) + f"\n{summary(cells)}"
 
 
 def summary(cells: list[Cell]) -> str:
@@ -1517,7 +1509,8 @@ def summary(cells: list[Cell]) -> str:
     n_env = sum(1 for c in cells if c.beyond_envelope)
     n_env_known = sum(1 for c in cells if c.reachable is not None)
     if n_env_known:
-        bits.append(f"{n_env} beyond the envelope of {n_env_known} checked")
+        bits.append(
+            f"{n_env} beyond maximum range")
     worst = max((c.defect for c in cells if c.defect ==
                 c.defect), default=float("nan"))
     if worst == worst:
@@ -1531,8 +1524,7 @@ def summary(cells: list[Cell]) -> str:
 def main():
     ap = argparse.ArgumentParser(
         description="Plot planned loft trajectories from a merged table or a grid run.",
-        formatter_class=argparse.RawDescriptionHelpFormatter,
-        epilog=__doc__.split("WHY THIS EXISTS")[0].strip())
+        formatter_class=argparse.RawDescriptionHelpFormatter)
     src = ap.add_argument_group("input (at least one)")
     src.add_argument("--table", action="append", default=[], metavar="FILE",
                      help="merged table JSON (grid_dymos.py --merge). Repeatable.")
@@ -1656,7 +1648,7 @@ def main():
     cells = select(cells, args)
     if not cells:
         raise SystemExit(
-            "selection is empty -- check --fix values, --health and the other filters")
+            "selection is empty. check --fix values, --health and the other filters")
     print(f"plotting {summary(cells)}", file=sys.stderr)
 
     if args.list:
@@ -1681,7 +1673,7 @@ def main():
                 f"no cell with key '{want}' in the selection ({len(cells)} cells). "
                 f"Keys look like {keys} -- the axis values in order "
                 f"(range_km_launch_alt_m_launch_speed_ms_target_alt_m_target_speed_ms), "
-                f"or a position like #12. --list prints every one.")
+                f"or a position like #12. --list can be used to list them.")
         figs.append(
             (f"cell {pick[0].key}", plot_detail(pick, args, plt, desc)))
     elif args.overview:
