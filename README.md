@@ -16,7 +16,13 @@ The mod only patches code that runs if you are host, so you can safely join vani
 
 May improve scythe performance. The scythe will now hit targets up to around 250 km as long as they are easy targets such as AI helicopters, by lofting properly. AI fighters can be hit around half the time at around 90 km. Effectiveness against human targets is mostly unchanged thanks to ecm, mcm, and sea skimming. The scimitar's performance is mostly unchanged because of its drag nerfs, making lofting rather useless.
 
-I have provided some loft tables I have generated previously. I recommend just using those as they are probably good enough. 
+I have provided some loft tables I have generated previously. I recommend just using them as they are probably good enough.
+
+This is part of the scythe table:
+<img alt="scythe2 2 1t" src="https://github.com/user-attachments/assets/ea30ad30-c657-4ed5-a827-a4305116bfbb" />
+
+This is part of the scimitar table, it's worse than the scythe table because it's older, but it should still be an improvement over the vanilla lofting:
+<img alt="scimitar" src="https://github.com/user-attachments/assets/94926126-8f73-45a1-821c-94cc874e153c" />
 
 If you want to optimise some missiles yourself, you can use sim/grid_dymos.py to run the optimiser, it will make loft_tables.json for you. After cloning the repo, the process is something like this, I think? replace --jobs 15 with around twice the number of your cpu cores.
 
