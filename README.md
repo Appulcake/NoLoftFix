@@ -3,6 +3,11 @@
 This project is an unofficial community modification and is not affiliated with, sponsored by, or endorsed by Shockfront Studios Pty Ltd. Original Nuclear Option assets, vehicle designs, audio, and code are Copyright (c) 2026 Shockfront Studios Pty Ltd. All rights reserved. Nuclear Option and Shockfront Studios are trademarks or registered trademarks of Shockfront Studios Pty Ltd. Original mod content and all other trademarks belong to their respective owners.
 
 ---
+Vanilla 0.34.2
+<img alt="lofting without loft fix" src="https://github.com/user-attachments/assets/745f1cd8-7ed5-488e-8fc6-a057aefedefc" />
+
+With loft fix
+<img alt="lofting with loft fix" src="https://github.com/user-attachments/assets/a2b648b9-ea11-4456-b546-1fdd122d115f" />
 
 [NO discord mod forum post](https://discord.com/channels/909034158205059082/1557018166868312094/1557018166868312094)
 
