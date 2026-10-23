@@ -24,7 +24,7 @@ This is part of the scythe table:
 This is part of the scimitar table, it's worse than the scythe table because it's older, but it should still be an improvement over the vanilla lofting:
 <img alt="scimitar" src="https://github.com/user-attachments/assets/94926126-8f73-45a1-821c-94cc874e153c" />
 
-There are nonsensical trajectories but they usually get averaged out.
+There are nonsensical trajectories in both tables but they usually get averaged out, and most are at longer ranges anyway.
 
 If you want to optimise some missiles yourself, you can use sim/grid_dymos.py to run the optimiser, it will make loft_tables.json for you. After cloning the repo, the process is something like this, I think? replace --jobs 15 with around twice the number of your cpu cores.
 
