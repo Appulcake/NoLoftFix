@@ -810,11 +810,10 @@ def plot_overview(cells: list[Cell], args, plt, desc: str):
     if ax is not None:
         ax.axhline(DEFAULT_MIN_TERMINAL, color="0.4", lw=0.9, ls="--")
         ax.axhline(SELF_DESTRUCT_SPEED, color="crimson", lw=0.9, ls=":")
-        ax.text(0.99, 0.02,
-                f"dashed {DEFAULT_MIN_TERMINAL:.0f} m/s = the mod's load-time filter\n"
-                f"dotted {SELF_DESTRUCT_SPEED:.0f} m/s = self-destruct",
-                transform=ax.transAxes, fontsize=7, color="0.35", ha="right", va="bottom",
-                bbox=dict(fc="white", ec="0.85", alpha=0.85, pad=1.5))
+        # ax.text(0.99, 0.02,
+        #         f"{SELF_DESTRUCT_SPEED:.0f} m/s = self-destruct",
+        #         transform=ax.transAxes, fontsize=7, color="0.35", ha="right", va="bottom",
+        #         bbox=dict(fc="white", ec="0.85", alpha=0.85, pad=1.5))
     ax = by_name.get("lowest speed along the path (m/s)")
     if ax is not None:
         ax.axhline(SELF_DESTRUCT_SPEED, color="crimson", lw=0.9, ls=":")
