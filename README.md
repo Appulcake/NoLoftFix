@@ -18,11 +18,13 @@ May improve scythe performance. The scythe will now hit targets up to around 250
 
 I have provided some loft tables I have generated previously. I recommend just using them as they are probably good enough.
 
-This is part of the scythe table:
+Part of the scythe table:
 <img alt="scythe2 2 1t" src="https://github.com/user-attachments/assets/ea30ad30-c657-4ed5-a827-a4305116bfbb" />
 
-This is part of the scimitar table, it's worse than the scythe table because it's older, but it should still be an improvement over the vanilla lofting:
-<img alt="scimitar" src="https://github.com/user-attachments/assets/94926126-8f73-45a1-821c-94cc874e153c" />
+Part of the scimitar table:
+<img alt="scimitar2t" src="https://github.com/user-attachments/assets/1a9e5131-0755-4d5a-92d1-e4687ac9a9df" />
+
+It seems like you shouldn't launch scimitars at low speed?
 
 There are nonsensical trajectories in both tables but they usually get averaged out, and most are at longer ranges anyway.
 
